@@ -1,0 +1,7 @@
+# 평문 원본과 사진/영상 원본은 절대 공개 저장소에 올리지 않는다
+tools/content.source.json
+assets/photos/*
+!assets/photos/*.enc
+.DS_Store
+.omc/
+.claude/

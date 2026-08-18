@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>🏖️ To. My Happy Place</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏖️</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+<!-- ============ PASSWORD GATE ============ -->
+<div id="gate" aria-label="Locked entrance">
+  <div class="gate-sky"></div>
+  <div class="gate-sea"></div>
+  <div class="gate-sand"></div>
+  <div class="gate-card">
+    <div class="bottle-wrap" aria-hidden="true">
+      <svg class="bottle" viewBox="0 0 120 200">
+        <defs>
+          <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="rgba(200,240,250,.6)"/>
+            <stop offset="1" stop-color="rgba(120,200,225,.28)"/>
+          </linearGradient>
+        </defs>
+        <rect x="48" y="8" width="24" height="26" rx="5" fill="#c98d5a"/>
+        <path d="M46 34 h28 v18 c14 8 22 24 22 44 v78 a18 18 0 0 1 -18 18 H42 a18 18 0 0 1 -18 -18 v-78 c0-20 8-36 22-44 z"
+              fill="url(#glassG)" stroke="rgba(255,255,255,.85)" stroke-width="2.5"/>
+        <path d="M44 96 l32 -14 v58 l-32 14 z" fill="#fdf3dd" stroke="#e8cfa0" stroke-width="2"/>
+        <path d="M50 104 l20 -9 M50 116 l20 -9 M50 128 l20 -9" stroke="#d9b98a" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <ellipse cx="60" cy="176" rx="22" ry="5" fill="rgba(255,255,255,.2)"/>
+      </svg>
+      <div class="bottle-glow"></div>
+    </div>
+    <h1 class="gate-title">A message in a bottle has arrived</h1>
+    <p class="gate-sub">It opens with the password only we two know</p>
+    <form id="gate-form" autocomplete="off">
+      <input id="gate-pw" type="password" inputmode="text" placeholder="Password"
+             aria-label="Password" autocapitalize="off" autocorrect="off">
+      <button type="submit" id="gate-btn"><span>Open the letter</span></button>
+    </form>
+    <p id="gate-error" role="alert"></p>
+    <button id="gate-hint-btn" type="button">I need a hint 🐚</button>
+    <p id="gate-hint"></p>
+  </div>
+</div>
+
+<!-- ============ FIXED BEACH SCENE ============ -->
+<div id="scene" aria-hidden="true">
+  <div id="sky"></div>
+  <div id="scene-stars"></div>
+  <div id="sun"></div>
+  <div id="moon"></div>
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <canvas id="sea"></canvas>
+  <div class="dolphin d1">
+    <svg viewBox="0 0 120 60">
+      <path d="M10 42 C30 14 78 10 104 34 L112 30 C116 36 114 42 108 44 C112 48 108 52 102 50 C96 48 90 44 86 42 C66 46 38 48 18 46 C14 45 11 44 10 42 Z"/>
+      <path d="M54 17 C58 8 66 5 71 9 C65 12 59 15 54 17 Z"/>
+      <path d="M46 36 C50 42 56 46 62 44 C56 38 51 35 46 36 Z"/>
+    </svg>
+  </div>
+  <div class="dolphin d2">
+    <svg viewBox="0 0 120 60">
+      <path d="M10 42 C30 14 78 10 104 34 L112 30 C116 36 114 42 108 44 C112 48 108 52 102 50 C96 48 90 44 86 42 C66 46 38 48 18 46 C14 45 11 44 10 42 Z"/>
+      <path d="M54 17 C58 8 66 5 71 9 C65 12 59 15 54 17 Z"/>
+      <path d="M46 36 C50 42 56 46 62 44 C56 38 51 35 46 36 Z"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ============ HUD ============ -->
+<div id="hud" hidden>
+  <div id="clock-hud" aria-label="Beach time"><span id="clock-time">12:00</span></div>
+  <div id="shell-hud" title="Three shells are hidden on this beach — find them">
+    <span class="shell-dot" data-p="0">🐚</span><span class="shell-dot" data-p="1">🐚</span><span class="shell-dot" data-p="2">🐚</span>
+  </div>
+  <button id="sound-toggle" aria-label="Toggle wave sounds" aria-pressed="false">🔇</button>
+</div>
+
+<!-- ============ CONTENT ============ -->
+<main id="beach" hidden>
+
+  <!-- ═══ NOON : hero ═══ -->
+  <section id="sec-hero" class="sec">
+    <div class="hero-copy">
+      <p class="hero-eyebrow" id="c-eyebrow"></p>
+      <h2 class="hero-title"><span id="c-title-1"></span><span id="c-title-2" class="hero-title-accent"></span></h2>
+      <p class="hero-sub" id="c-hero-sub"></p>
+    </div>
+
+    <!-- parasol · chair · drinks -->
+    <div id="hero-beach-set">
+      <svg id="parasol-set" viewBox="0 0 520 300" aria-hidden="true">
+        <!-- parasol -->
+        <g id="parasol">
+          <rect x="206" y="60" width="7" height="216" rx="3.5" fill="#8a6242"/>
+          <path d="M209 18 C120 18 62 62 52 108 L366 108 C356 62 298 18 209 18 Z" fill="#ff8f6b"/>
+          <path d="M96 108 C100 60 140 26 209 20 C160 30 128 64 124 108 Z" fill="#ffe3c2"/>
+          <path d="M176 108 C178 56 192 26 209 19 C226 26 240 56 242 108 Z" fill="#ffd0a8" opacity=".9"/>
+          <path d="M294 108 C290 60 258 28 209 20 C262 28 288 62 322 108 Z" fill="#ffe3c2"/>
+          <circle cx="209" cy="14" r="7" fill="#8a6242"/>
+          <path d="M52 108 Q209 130 366 108" fill="none" stroke="#e86f4d" stroke-width="6" stroke-linecap="round"/>
+        </g>
+        <!-- chair -->
+        <g id="chair">
+          <path d="M262 160 L340 150 L352 214 L268 224 Z" fill="#69b7d8"/>
+          <path d="M262 160 L340 150 L336 128 L258 138 Z" fill="#8ccdE8" opacity=".95"/>
+          <path d="M256 226 l6 46 M354 212 l8 44 M268 224 l-22 40 M348 216 l30 36" stroke="#8a6242" stroke-width="7" stroke-linecap="round"/>
+          <path d="M262 160 l-10 -34" stroke="#8a6242" stroke-width="7" stroke-linecap="round"/>
+        </g>
+        <!-- side table + drinks -->
+        <g id="drink-table">
+          <ellipse cx="440" cy="212" rx="52" ry="12" fill="#a5764e"/>
+          <rect x="434" y="212" width="12" height="56" rx="5" fill="#8a6242"/>
+          <g id="glass-a">
+            <path d="M406 168 l20 0 l-4 34 l-12 0 Z" fill="rgba(255,214,120,.9)" stroke="#fff" stroke-width="2"/>
+            <line x1="416" y1="202" x2="416" y2="210" stroke="#fff" stroke-width="2.4"/>
+            <circle cx="422" cy="164" r="5" fill="#ff6b6b"/>
+          </g>
+          <g id="glass-b">
+            <path d="M452 164 l22 0 l-5 40 l-12 0 Z" fill="rgba(190,236,255,.9)" stroke="#fff" stroke-width="2"/>
+            <line x1="463" y1="204" x2="463" y2="211" stroke="#fff" stroke-width="2.4"/>
+            <rect x="468" y="150" width="4" height="18" rx="2" fill="#7fd8a8" transform="rotate(18 470 159)"/>
+          </g>
+        </g>
+      </svg>
+      <button id="cheers" aria-label="Clink glasses">🥂</button>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span id="c-scroll-cue"></span>
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 9l8 8 8-8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <!-- ═══ AFTERNOON : photos ═══ -->
+  <section id="sec-photos" class="sec">
+    <div class="sec-head reveal">
+      <p class="time-tag">2:00 PM · HIGH NOON</p>
+      <h3 class="sec-title" id="c-photos-title"></h3>
+      <p class="sec-sub" id="c-photos-sub"></p>
+    </div>
+    <div id="photo-drift"></div>
+    <button class="shell" data-shell="0" aria-label="Hidden shell">🐚</button>
+  </section>
+
+  <!-- ═══ WAVE RIDE ═══ -->
+  <section id="sec-wave" class="sec sec-slim">
+    <div class="sec-head reveal">
+      <p class="time-tag">4:00 PM · WHEN THE WATER'S JUST RIGHT</p>
+      <h3 class="sec-title" id="c-wave-title"></h3>
+      <p class="sec-sub" id="c-wave-sub"></p>
+    </div>
+    <div id="wave-stage" class="reveal">
+      <svg id="wave-svg" viewBox="0 0 700 220" aria-hidden="true">
+        <path id="wave-back" d="M0 150 C120 110 240 190 360 150 C480 110 600 190 700 150 L700 220 L0 220 Z" fill="rgba(60,150,190,.5)"/>
+        <path id="wave-front" d="M0 170 C140 130 280 205 420 165 C540 132 630 195 700 168 L700 220 L0 220 Z" fill="rgba(30,120,170,.75)"/>
+        <g id="floater" opacity="0">
+          <ellipse cx="0" cy="2.5" rx="24" ry="4" fill="rgba(255,255,255,.3)"/>
+          <circle cx="-17" cy="-5" r="5.5" fill="#3b2f2a"/>
+          <path d="M-12 -3 C-8 -7 -2 -7 2 -5 C5 -4 8 -4 10 -7 C12 -9 13 -9 14 -7 C15 -5 16 -3 18 -2 L18 0 C6 3 -8 3 -12 0 Z" fill="#3b2f2a"/>
+          <path d="M-10 -4 C-14 -2 -17 0 -19 2" stroke="#3b2f2a" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        </g>
+        <g id="jetski" opacity="0">
+          <path d="M-24 3 C-14 -2 10 -4 22 -3 L30 1 C24 6 -8 8 -20 7 Z" fill="#e8543f"/>
+          <path d="M-10 -3 C-4 -6 6 -6 10 -3 L10 -1 L-10 -1 Z" fill="#a83a2a"/>
+          <path d="M14 -3 L21 -11" stroke="#5c2a1e" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="-1" cy="-19" r="5.5" fill="#3b2f2a"/>
+          <path d="M0 -14 C2 -10 4 -8 6 -6 M0 -14 C6 -13 13 -12 20 -11 M4 -6 L10 -2" stroke="#3b2f2a" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+        </g>
+        <g id="spray"></g>
+      </svg>
+      <button id="ride-btn"><span id="c-ride-btn"></span></button>
+    </div>
+  </section>
+
+  <!-- ═══ GOLDEN HOUR : memories ═══ -->
+  <section id="sec-mem" class="sec">
+    <div class="sec-head reveal">
+      <p class="time-tag">5:30 PM · GOLDEN HOUR</p>
+      <h3 class="sec-title" id="c-mem-title"></h3>
+      <p class="sec-sub" id="c-mem-sub"></p>
+    </div>
+    <ol id="memory-line"></ol>
+    <button class="shell" data-shell="1" aria-label="Hidden shell">🐚</button>
+  </section>
+
+  <!-- ═══ SUNSET : 윤슬 = reasons ═══ -->
+  <section id="sec-yunseul" class="sec">
+    <div class="sec-head reveal">
+      <p class="time-tag">7:00 PM · YUNSEUL, THE SHIMMER HOUR</p>
+      <h3 class="sec-title shimmer-title" id="c-reasons-title"></h3>
+      <p class="sec-sub" id="c-reasons-sub"></p>
+    </div>
+    <div id="reason-cards"></div>
+    <button class="shell" data-shell="2" aria-label="Hidden shell">🐚</button>
+  </section>
+
+  <!-- ═══ DUSK : letter ═══ -->
+  <section id="sec-letter" class="sec">
+    <div class="sec-head reveal">
+      <p class="time-tag">8:00 PM · AFTER SUNDOWN</p>
+      <h3 class="sec-title shimmer-title" id="c-letter-title"></h3>
+      <p class="sec-sub" id="c-letter-sub"></p>
+    </div>
+
+    <div id="bottle-stage" class="reveal">
+      <button id="shore-bottle" aria-label="Open the bottle that washed ashore">
+        <svg viewBox="0 0 200 130">
+          <ellipse cx="100" cy="112" rx="86" ry="12" fill="rgba(40,30,50,.28)"/>
+          <g transform="rotate(66 100 65)">
+            <rect x="88" y="-2" width="24" height="22" rx="5" fill="#c98d5a"/>
+            <path d="M86 20 h28 v14 c13 8 20 22 20 40 v30 a17 17 0 0 1 -17 17 H83 a17 17 0 0 1 -17 -17 V74 c0-18 7-32 20-40 z"
+                  fill="rgba(200,240,250,.55)" stroke="rgba(255,255,255,.9)" stroke-width="2.5"/>
+            <path d="M84 66 l32 -13 v42 l-32 13 z" fill="#fdf3dd" stroke="#e8cfa0" stroke-width="2"/>
+          </g>
+        </svg>
+        <span id="c-bottle-label"></span>
+      </button>
+    </div>
+
+    <article id="letter" hidden>
+      <div class="letter-paper">
+        <p class="letter-date" id="c-letter-date"></p>
+        <h4 class="letter-head" id="c-letter-head"></h4>
+        <div id="c-letter-body"></div>
+        <p class="letter-sign" id="c-letter-sign"></p>
+        <button id="letter-close">Fold it back into the bottle 🫙</button>
+      </div>
+    </article>
+  </section>
+
+  <!-- ═══ NIGHT ═══ -->
+  <section id="sec-night" class="sec sec-slim">
+    <div class="sec-head reveal">
+      <p class="time-tag">10:00 PM · THE NIGHT SEA</p>
+      <h3 class="sec-title shimmer-title" id="c-night-title"></h3>
+      <p class="sec-sub" id="c-night-sub"></p>
+    </div>
+    <footer id="beach-footer"><p id="c-footer"></p></footer>
+  </section>
+</main>
+
+<!-- bonus : all shells found -->
+<button id="bonus-bottle" hidden aria-label="Open the secret bottle">
+  <svg viewBox="0 0 60 100">
+    <rect x="24" y="4" width="12" height="13" rx="3" fill="#c98d5a"/>
+    <path d="M23 17 h14 v9 c7 4 11 12 11 22 v39 a9 9 0 0 1 -9 9 H21 a9 9 0 0 1 -9 -9 V48 c0-10 4-18 11-22 z" fill="rgba(200,240,250,.55)" stroke="rgba(255,255,255,.9)" stroke-width="2"/>
+    <path d="M22 48 l16 -7 v29 l-16 7 z" fill="#fdf3dd"/>
+  </svg>
+</button>
+
+<div id="bonus-modal" hidden role="dialog" aria-modal="true" aria-label="Secret letter">
+  <div class="bonus-card">
+    <p class="bonus-tag">🐚 Only for the one who found all three shells</p>
+    <h4 id="c-bonus-title"></h4>
+    <div id="c-bonus-body"></div>
+    <button id="bonus-close">I'll keep this one close 🤍</button>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script src="content.enc.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
